@@ -73,8 +73,9 @@ void GetString(void) {
 }
 
 void Match(char c) {
-	if (Look!=c) 
-		printf("Expected %c", c);
+	if (Look!=c) {
+		printf("Expected %c", c);	
+}
 	else {
 		GetChar();
 		SkipWhite();
@@ -113,7 +114,7 @@ void E(void) {
 }
 }
 
-// Parse and Identify a Number
+// Parse and Identify a Number/
 void Number(void) {
 	printf("<NUMBER>\n");
 	GetNum();
@@ -124,6 +125,27 @@ void Number(void) {
 	else 
 		printf("</NUMBER>\n");
 }
+// Parse and Note Elements
+void Elements(void) {
+	printf("<ELEMENT\n");
+	Value();
+	printf("</ELEMENT\n");
+	while (Look == ',') {
+		Match(','); 
+		printf("<ELEMENT>\n");
+		Value();
+		printf("</ELEMENT>\n");
+ }
+}
+// Parse and Note an Array
+void Array(void) {
+	printf("<ARRAY>\n");
+	Match('[');
+	Elements();
+	Match(']');
+	printf("</ARRAY>\n");
+}
+	
 
 // Identify What the value is
 void Ident(void) {
@@ -133,8 +155,8 @@ void Ident(void) {
 		Number();
 	else if (Look =='{')
 		Object();
-	//else if (Look == '[')
-	//	Array();
+	else if (Look == '[')
+		Array();
 }
 
 // Parse and Note A Value
