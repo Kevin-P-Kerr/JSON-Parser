@@ -85,38 +85,44 @@ void Match(char c) {
 
 // Parse and Note a String
 void String(void) {
-	printf("<STRING>");
+	printf("<STRING\n>");
 	GetString();
 	printf("</STRING>\n");
 }
 // Parse and Identify a Fraction
 void Frac(void) {
 	Match('.');
-	printf("<FRACTION>");
+	printf("<FRACTION\n>");
 	GetNum();
 	printf("</FRACTION>\n");
 }
 
 // Parse and Identiry an Exponent
 void E(void) {
-	Match('e');
-	printf("<EXP>");
-	GetNum();
-	printf("<EXP>\n");
+	GetChar();
+	if (Look == '-') {
+		Match('-');
+		printf("<NEGATIVE EXP>\n");
+		GetNum();
+		printf("</NEGATIVE EXP>\n</NUMBER>\n");
 }
-	
-
+	else {
+		printf("<EXP>\n");
+		GetNum();
+		printf("<EXP>\n</NUMBER>\n");
+}
+}
 
 // Parse and Identify a Number
 void Number(void) {
-	printf("<NUMBER>");
+	printf("<NUMBER>\n");
 	GetNum();
 	if (Look == '.')
 		Frac();
-        if (Look == 'e')
+        if ((Look == 'E') || (Look == 'e'))
 		E();
 	else 
-		printf("</NUMBER>");
+		printf("</NUMBER>\n");
 }
 
 // Identify What the value is
@@ -133,7 +139,7 @@ void Ident(void) {
 
 // Parse and Note A Value
 void Value(void) {
-	printf("<VALUE>");
+	printf("<VALUE>\n");
 	Ident();
 	printf("</VALUE>\n");
 }
@@ -147,12 +153,15 @@ void Pair(void) {
 	Match(':');
 	Value();
 	printf("</PAIR>\n");
+	printf("</MEMBER>\n");
+	if (Look!='}')
+		Member();
 }
 // Parse and Note a Member
 void Member(void) {
-	printf("<MEMBER>");
+	printf("<MEMBER>\n");
 	Pair();
-	printf("</MEMBER>");
+
 }
 
 
@@ -162,7 +171,7 @@ void Object(void) {
 	if (Look == '}')
 		printf("NULL OBJECT");
 	else {
-		printf("<OBJECT>");
+		printf("<OBJECT>\n");
 		Member();
 		printf("</OBJECT>\n");
 }
@@ -178,6 +187,6 @@ void Init(void) {
 main() {
 	Init();
 	Object();
-	printf("Finished");
+	printf("\nFinished");
 }
 
