@@ -87,7 +87,9 @@ void Match(char c) {
 // Parse and Note a String
 void String(void) {
 	printf("<STRING\n>");
+	Match('"');
 	GetString();
+	Match('"');
 	printf("</STRING>\n");
 }
 // Parse and Identify a Fraction
@@ -149,7 +151,7 @@ void Array(void) {
 
 // Identify What the value is
 void Ident(void) {
-	if (IsAlph() == 0) 
+	if (Look == '"') 
 		String();
 	else if (IsNum() == 0)
 		Number();
@@ -174,6 +176,7 @@ void Pair(void) {
 	String();
 	Match(':');
 	Value();
+	Match(',');
 	printf("</PAIR>\n");
 	printf("</MEMBER>\n");
 	if (Look!='}')
