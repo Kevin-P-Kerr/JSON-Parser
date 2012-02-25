@@ -55,26 +55,26 @@ void GetNum(void) {
 		GetChar();
 } 
 	line[i] = '\0';
-	printf("%s", line);
+	printf("%s\n", line);
 	SkipWhite();
 }
 
 void GetString(void) {
 	int i = 0;
 	char line[MAXLINE];
-	while (IsAlphNum() == 0) {
+	while ((IsAlphNum() == 0) || (IsWhite() == 0)) {
 		line[i] = Look;
 		i = ++i;
 		GetChar(); 
 }
-	line[i + 1] = '\0';
-	printf("%s", line);
+	line[i] = '\0';
+	printf("%s\n", line);
 	SkipWhite();
 }
 
 void Match(char c) {
 	if (Look!=c) {
-		printf("Expected %c", c);	
+		printf("Expected %c\n", c);	
 }
 	else {
 		GetChar();
@@ -86,7 +86,7 @@ void Match(char c) {
 
 // Parse and Note a String
 void String(void) {
-	printf("<STRING\n>");
+	printf("<STRING>\n");
 	Match('"');
 	GetString();
 	Match('"');
@@ -176,7 +176,8 @@ void Pair(void) {
 	String();
 	Match(':');
 	Value();
-	Match(',');
+	if (Look == ',') 
+		Match(',');
 	printf("</PAIR>\n");
 	printf("</MEMBER>\n");
 	if (Look!='}')
